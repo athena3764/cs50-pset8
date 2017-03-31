@@ -76,7 +76,6 @@ $(function() {
  */
 function addMarker(place)
 {
-	
 	var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
     
 	//defines the position for the map
