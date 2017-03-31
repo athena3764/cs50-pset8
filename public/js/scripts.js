@@ -75,46 +75,52 @@ $(function() {
  * Adds marker for place to map.
  */
 function addMarker(place)
-{  var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+{
+	
+	var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
     
+	//defines the position for the map
     var pos = new google.maps.LatLng(place.latitude,place.longitude);
     
+	//defines the properties of marker
     var marker = new google.maps.Marker({
           position: pos,
           icon: iconBase + 'info-i_maps.png',
           label: place.place_name,
           map: map
         });
-        markers.push(marker);
-        
-    
- google.maps.event.addListener(marker, "click", function(){
-     
-	showInfo(marker);
 	
-	$.getJSON("articles.php", {
-	    geo: place.postal_code
-	})
-	.done(function(data, textStatus, jqXHR){
-	    
-	    if (data.length < 1){
-		showInfo(marker, "slow news day");
-	    }
-	    
-	    else{
-	        
-		var articles = "<ul>";
+	//add markers to the marker array
+	markers.push(marker);
+	
+	//attach event handlers to Google maps
+	google.maps.event.addListener(marker, "click", function(){
+    
+	//shows info window at marker with content.
+	showInfo(marker);
 		
-		for (var i = 0; i < data.length; i++){
-		    
-		    articles += "<li> <a href=" + data[i].link + "target=_blank>" + data[i].title + "</li>";
-		}
-          articles += "</ul>";
-          showInfo(marker, articles);
-	    }
+		/*load JSON-encoded data from the server using a 
+		GET HTTP request.*/
+		$.getJSON("articles.php", {geo: place.postal_code})
+		
+			//success callback
+			.done(function(data, textStatus, jqXHR){
+			if (data.length < 1){
+				
+				//if the array is empty call this function
+				showInfo(marker, "slow news day");
+			}
+			else{
+				//display articles
+				var articles = "<ul>";
+				for (var i = 0; i < data.length; i++){
+		   		articles += "<li> <a href=" + data[i].link + "target=_blank>" + data[i].title + "</li>";
+				}
+				articles += "</ul>";
+				showInfo(marker, articles);
+			}
+		});
 	});
- });
-
 }
 
 /**
