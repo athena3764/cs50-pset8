@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+
+//import the data from US.text into the SQL database
+
  require(__DIR__ . "/../includes/config.php");
 
 $filename = ("US.txt");
